@@ -1,0 +1,76 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}IslaHaven — My Bookings{% endblock %}
+
+{% block content %}
+<h2 class="text-xl font-semibold mb-2">My Bookings</h2>
+<p class="text-sm text-gray-600 mb-6">Overview of hotel, ferry and event bookings.</p>
+
+<div class="overflow-x-auto rounded-lg shadow">
+  <table class="min-w-full bg-white rounded-lg overflow-hidden">
+    <thead class="bg-teal-600 text-white">
+      <tr>
+        <th class="py-3 px-4 text-left">Type</th>
+        <th class="py-3 px-4 text-left">Details</th>
+        <th class="py-3 px-4 text-left">Date</th>
+        <th class="py-3 px-4 text-left">Status</th>
+        <th class="py-3 px-4 text-left">Action</th>
+      </tr>
+    </thead>
+    <tbody class="divide-y divide-gray-200">
+      {% for booking in bookings %}
+      <tr class="hover:bg-gray-50">
+        <td class="py-3 px-4 font-medium">Hotel</td>
+        <td class="py-3 px-4">{{ booking.hotel.name }} — {{ booking.hotel.description|truncatewords:3 }}</td>
+        <td class="py-3 px-4">{{ booking.check_in_date|date:"M d" }} - {{ booking.check_out_date|date:"M d" }}</td>
+        <td class="py-3 px-4">
+          <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full {% if booking.is_confirmed %}bg-green-100 text-green-800{% else %}bg-yellow-100 text-yellow-800{% endif %}">
+            {{ booking.is_confirmed|yesno:"Confirmed,Pending" }}
+          </span>
+        </td>
+        <td class="py-3 px-4">
+          <a href="{% url 'booking_detail' booking.id %}" class="btn-primary text-sm">View Details</a>
+        </td>
+      </tr>
+      {% endfor %}
+      {% for booking in bookings %}
+      {% for ferry_booking in booking.ferrybooking_set.all %}
+      <tr class="hover:bg-gray-50">
+        <td class="py-3 px-4 font-medium">Ferry</td>
+        <td class="py-3 px-4">{{ ferry_booking.ferry.name }} — {{ ferry_booking.ferry.departure_location }} to {{ ferry_booking.ferry.arrival_location }}</td>
+        <td class="py-3 px-4">{{ ferry_booking.departure_date|date:"M d" }}</td>
+        <td class="py-3 px-4">
+          <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-green-100 text-green-800">
+            Paid
+          </span>
+        </td>
+        <td class="py-3 px-4">
+          <a href="{% url 'tickets' %}" class="btn-primary text-sm">View Ticket</a>
+        </td>
+      </tr>
+      {% endfor %}
+      {% for event_booking in booking.eventbooking_set.all %}
+      <tr class="hover:bg-gray-50">
+        <td class="py-3 px-4 font-medium">Event</td>
+        <td class="py-3 px-4">{{ event_booking.event.title }}</td>
+        <td class="py-3 px-4">{{ event_booking.event.event_date|date:"M d" }}</td>
+        <td class="py-3 px-4">
+          <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-yellow-100 text-yellow-800">
+            Registered
+          </span>
+        </td>
+        <td class="py-3 px-4">
+          <a href="{% url 'booking_detail' booking.id %}" class="btn-primary text-sm">Details</a>
+        </td>
+      </tr>
+      {% endfor %}
+      {% endfor %}
+    </tbody>
+  </table>
+</div>
+
+<div class="mt-6 text-sm text-gray-600 bg-blue-50 p-4 rounded-lg">
+  <p>Want to cancel or edit a booking? Click <strong>View Details</strong> to see options.</p>
+</div>
+{% endblock %}

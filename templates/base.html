@@ -1,0 +1,96 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>{% block title %}IslaHaven{% endblock %}</title>
+  <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <style> 
+    body{font-family:'Inter',ui-sans-serif,system-ui,-apple-system,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif;}
+    .btn-primary { @apply bg-teal-600 hover:bg-teal-700 text-white font-semibold py-2 px-4 rounded transition-colors shadow; }
+    .btn-secondary { @apply bg-white hover:bg-gray-100 text-teal-600 border border-teal-600 font-semibold py-2 px-4 rounded transition-colors shadow; }
+    .btn-tertiary { @apply bg-gray-200 hover:bg-gray-300 text-gray-800 font-semibold py-2 px-4 rounded transition-colors; }
+    .btn-transparent { @apply bg-transparent hover:bg-gray-100 text-gray-700 font-medium py-2 px-4 rounded transition-colors; }
+    .card { @apply bg-white rounded-xl shadow-md overflow-hidden hover:shadow-lg transition-shadow; }
+  </style>
+</head>
+<body class="bg-gray-50 text-gray-800 min-h-screen flex flex-col">
+  <header class="bg-white shadow sticky top-0 z-50">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="flex justify-between items-center h-16">
+        <div class="flex items-center">
+          <a href="{% url 'index' %}" class="text-2xl font-bold text-teal-600">IslaHaven</a>
+        </div>
+        <nav class="hidden md:flex space-x-6">
+          <a href="{% url 'index' %}" class="text-gray-700 hover:text-teal-600 font-medium {% if request.resolver_match.url_name == 'index' %}text-teal-600 border-b-2 border-teal-600 pb-1{% endif %}">Home</a>
+          <a href="{% url 'rooms' %}" class="text-gray-700 hover:text-teal-600 font-medium {% if request.resolver_match.url_name == 'rooms' %}text-teal-600 border-b-2 border-teal-600 pb-1{% endif %}">Rooms</a>
+          <a href="{% url 'ferry' %}" class="text-gray-700 hover:text-teal-600 font-medium {% if request.resolver_match.url_name == 'ferry' %}text-teal-600 border-b-2 border-teal-600 pb-1{% endif %}">Ferry</a>
+          <a href="{% url 'tickets' %}" class="text-gray-700 hover:text-teal-600 font-medium {% if request.resolver_match.url_name == 'tickets' %}text-teal-600 border-b-2 border-teal-600 pb-1{% endif %}">Tickets</a>
+          <a href="{% url 'events' %}" class="text-gray-700 hover:text-teal-600 font-medium {% if request.resolver_match.url_name == 'events' %}text-teal-600 border-b-2 border-teal-600 pb-1{% endif %}">Events</a>
+          <a href="{% url 'dashboard' %}" class="text-gray-700 hover:text-teal-600 font-medium {% if request.resolver_match.url_name == 'dashboard' %}text-teal-600 border-b-2 border-teal-600 pb-1{% endif %}">Dashboard</a>
+          <a href="{% url 'booking-view' %}" class="text-gray-700 hover:text-teal-600 font-medium {% if request.resolver_match.url_name == 'booking-view' %}text-teal-600 border-b-2 border-teal-600 pb-1{% endif %}">My Bookings</a>
+          <a href="{% url 'login' %}" class="text-gray-700 hover:text-teal-600 font-medium {% if request.resolver_match.url_name == 'login' %}text-teal-600 border-b-2 border-teal-600 pb-1{% endif %}">Login</a>
+        </nav>
+        <div class="md:hidden">
+          <button id="mobile-menu-button" class="text-gray-700 hover:text-teal-600">
+            <svg class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
+            </svg>
+          </button>
+        </div>
+      </div>
+    </div>
+    
+    <!-- Mobile menu -->
+    <div id="mobile-menu" class="md:hidden hidden bg-white py-2 px-4 shadow-inner">
+      <div class="flex flex-col space-y-3">
+        <a href="{% url 'index' %}" class="text-gray-700 hover:text-teal-600 font-medium {% if request.resolver_match.url_name == 'index' %}text-teal-600{% endif %}">Home</a>
+        <a href="{% url 'rooms' %}" class="text-gray-700 hover:text-teal-600 font-medium {% if request.resolver_match.url_name == 'rooms' %}text-teal-600{% endif %}">Rooms</a>
+        <a href="{% url 'ferry' %}" class="text-gray-700 hover:text-teal-600 font-medium {% if request.resolver_match.url_name == 'ferry' %}text-teal-600{% endif %}">Ferry</a>
+        <a href="{% url 'tickets' %}" class="text-gray-700 hover:text-teal-600 font-medium {% if request.resolver_match.url_name == 'tickets' %}text-teal-600{% endif %}">Tickets</a>
+        <a href="{% url 'events' %}" class="text-gray-700 hover:text-teal-600 font-medium {% if request.resolver_match.url_name == 'events' %}text-teal-600{% endif %}">Events</a>
+        <a href="{% url 'dashboard' %}" class="text-gray-700 hover:text-teal-600 font-medium {% if request.resolver_match.url_name == 'dashboard' %}text-teal-600{% endif %}">Dashboard</a>
+        <a href="{% url 'booking-view' %}" class="text-gray-700 hover:text-teal-600 font-medium {% if request.resolver_match.url_name == 'booking-view' %}text-teal-600{% endif %}">My Bookings</a>
+        <a href="{% url 'login' %}" class="text-gray-700 hover:text-teal-600 font-medium {% if request.resolver_match.url_name == 'login' %}text-teal-600{% endif %}">Login</a>
+      </div>
+    </div>
+  </header>
+
+  <main class="flex-grow max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+    {% block content %}{% endblock %}
+  </main>
+
+  <footer class="bg-white border-t mt-auto">
+    <div class="max-w-7xl mx-auto px-4 py-6 sm:px-6 lg:px-8">
+      <div class="md:flex md:items-center md:justify-between">
+        <div class="text-center md:text-left">
+          <p class="text-sm text-gray-600">&copy; 2025 IslaHaven. All rights reserved.</p>
+        </div>
+        <div class="mt-4 flex justify-center md:mt-0">
+          <div class="flex space-x-6">
+            <a href="#" class="text-gray-400 hover:text-gray-500">
+              <span class="sr-only">Privacy</span>
+              Privacy
+            </a>
+            <a href="#" class="text-gray-400 hover:text-gray-500">
+              <span class="sr-only">Terms</span>
+              Terms
+            </a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </footer>
+  
+  <script>
+    // Mobile menu toggle
+    document.getElementById('mobile-menu-button').addEventListener('click', function() {
+      const menu = document.getElementById('mobile-menu');
+      menu.classList.toggle('hidden');
+    });
+  </script>
+</body>
+</html>

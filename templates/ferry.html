@@ -1,0 +1,42 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}IslaHaven — Ferry Schedule{% endblock %}
+
+{% block content %}
+<h2 class="text-xl font-semibold mb-2">Ferry Schedule & Booking</h2>
+<p class="text-sm text-gray-600 mb-6">Ferries run every hour. Hotel booking must be confirmed to complete your ferry purchase.</p>
+
+<div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+  {% for ferry in ferries %}
+  <div class="card p-4">
+    <div class="flex items-center justify-between">
+      <div>
+        <div class="text-sm text-gray-500">{{ ferry.departure_time|time:"H:i" }} - {{ ferry.arrival_time|time:"H:i" }}</div>
+        <div class="font-semibold text-lg">{{ ferry.name }}</div>
+        <div class="text-xs text-gray-500">From: {{ ferry.departure_location }} to {{ ferry.arrival_location }}</div>
+        <div class="text-xs text-gray-500 mt-1">Duration: 20 min</div>
+      </div>
+      <div class="text-right">
+        <div class="font-bold text-lg text-teal-600">USD {{ ferry.price }}</div>
+        <a href="{% url 'book_ferry' %}" class="btn-primary mt-3 text-sm">Book Ferry</a>
+      </div>
+    </div>
+  </div>
+  {% empty %}
+  <div class="col-span-3 text-center py-8">
+    <p class="text-gray-600">No ferry schedules available at the moment.</p>
+  </div>
+  {% endfor %}
+</div>
+
+<!-- Verify Booking -->
+<div class="card p-6 mt-10">
+  <h4 class="font-semibold text-lg">Book Ferry</h4>
+  <p class="text-sm text-gray-600 mt-2">To book a ferry ticket, you need a confirmed hotel booking.</p>
+  <div class="mt-4">
+    <a href="{% url 'book_ferry' %}" class="btn-primary">Book Ferry Now</a>
+  </div>
+  <p class="text-xs text-gray-500 mt-2">Select your existing hotel booking and choose a ferry from the schedule.</p>
+</div>
+{% endblock %}

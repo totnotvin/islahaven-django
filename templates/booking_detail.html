@@ -1,0 +1,163 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}IslaHaven — Booking Details{% endblock %}
+
+{% block content %}
+<div class="max-w-4xl mx-auto">
+    <h1 class="text-2xl font-bold text-gray-800 mb-6">Booking Details</h1>
+    
+    {% if booking %}
+    <div class="card p-6 mb-6">
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div>
+                <h3 class="text-lg font-semibold">Hotel Booking</h3>
+                <p><span class="font-medium">Reference:</span> {{ booking.booking_reference }}</p>
+                <p><span class="font-medium">Hotel:</span> {{ booking.hotel.name }}</p>
+                <p><span class="font-medium">Check-in:</span> {{ booking.check_in_date }}</p>
+                <p><span class="font-medium">Check-out:</span> {{ booking.check_out_date }}</p>
+                <p><span class="font-medium">Guests:</span> {{ booking.number_of_guests }}</p>
+                <p><span class="font-medium">Total Price:</span> USD {{ booking.total_price }}</p>
+                <p><span class="font-medium">Status:</span> 
+                    <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full {% if booking.is_confirmed %}bg-green-100 text-green-800{% else %}bg-yellow-100 text-yellow-800{% endif %}">
+                        {{ booking.is_confirmed|yesno:"Confirmed,Pending" }}
+                    </span>
+                </p>
+            </div>
+            <div>
+                <h3 class="text-lg font-semibold">Guest Information</h3>
+                <p><span class="font-medium">Name:</span> {{ booking.user.first_name }} {{ booking.user.last_name }}</p>
+                <p><span class="font-medium">Email:</span> {{ booking.user.email }}</p>
+                <p><span class="font-medium">Phone:</span> {{ booking.user.phone_number|default:"N/A" }}</p>
+                <p><span class="font-medium">Booking Date:</span> {{ booking.booking_date }}</p>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Ferry Bookings -->
+    {% if booking.ferrybooking_set.all %}
+    <div class="card p-6 mb-6">
+        <h3 class="text-lg font-semibold mb-4">Ferry Bookings</h3>
+        <div class="overflow-x-auto">
+            <table class="min-w-full">
+                <thead>
+                    <tr class="bg-gray-50">
+                        <th class="py-2 px-4 text-left">Ferry</th>
+                        <th class="py-2 px-4 text-left">Departure</th>
+                        <th class="py-2 px-4 text-left">Passengers</th>
+                        <th class="py-2 px-4 text-left">Total Price</th>
+                        <th class="py-2 px-4 text-left">Status</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for ferry_booking in booking.ferrybooking_set.all %}
+                    <tr class="border-t">
+                        <td class="py-2 px-4">{{ ferry_booking.ferry.name }}</td>
+                        <td class="py-2 px-4">{{ ferry_booking.departure_date|date:"M d, Y" }}</td>
+                        <td class="py-2 px-4">{{ ferry_booking.number_of_passengers }}</td>
+                        <td class="py-2 px-4">USD {{ ferry_booking.total_price }}</td>
+                        <td class="py-2 px-4">
+                            <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-green-100 text-green-800">
+                                Confirmed
+                            </span>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+    {% endif %}
+    
+    <!-- Theme Park Bookings -->
+    {% if booking.themeparkbooking_set.all %}
+    <div class="card p-6 mb-6">
+        <h3 class="text-lg font-semibold mb-4">Theme Park Bookings</h3>
+        <div class="overflow-x-auto">
+            <table class="min-w-full">
+                <thead>
+                    <tr class="bg-gray-50">
+                        <th class="py-2 px-4 text-left">Ticket</th>
+                        <th class="py-2 px-4 text-left">Date</th>
+                        <th class="py-2 px-4 text-left">Tickets</th>
+                        <th class="py-2 px-4 text-left">Total Price</th>
+                        <th class="py-2 px-4 text-left">Status</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for park_booking in booking.themeparkbooking_set.all %}
+                    <tr class="border-t">
+                        <td class="py-2 px-4">{{ park_booking.ticket.name }}</td>
+                        <td class="py-2 px-4">{{ park_booking.booking_date|date:"M d, Y" }}</td>
+                        <td class="py-2 px-4">{{ park_booking.number_of_tickets }}</td>
+                        <td class="py-2 px-4">USD {{ park_booking.total_price }}</td>
+                        <td class="py-2 px-4">
+                            <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-green-100 text-green-800">
+                                Confirmed
+                            </span>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+    {% endif %}
+    
+    <!-- Event Bookings -->
+    {% if booking.eventbooking_set.all %}
+    <div class="card p-6">
+        <h3 class="text-lg font-semibold mb-4">Event Bookings</h3>
+        <div class="overflow-x-auto">
+            <table class="min-w-full">
+                <thead>
+                    <tr class="bg-gray-50">
+                        <th class="py-2 px-4 text-left">Event</th>
+                        <th class="py-2 px-4 text-left">Date</th>
+                        <th class="py-2 px-4 text-left">Tickets</th>
+                        <th class="py-2 px-4 text-left">Total Price</th>
+                        <th class="py-2 px-4 text-left">Status</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for event_booking in booking.eventbooking_set.all %}
+                    <tr class="border-t">
+                        <td class="py-2 px-4">{{ event_booking.event.title }}</td>
+                        <td class="py-2 px-4">{{ event_booking.booking_date|date:"M d, Y" }}</td>
+                        <td class="py-2 px-4">{{ event_booking.number_of_tickets }}</td>
+                        <td class="py-2 px-4">USD {{ event_booking.total_price }}</td>
+                        <td class="py-2 px-4">
+                            <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-green-100 text-green-800">
+                                Confirmed
+                            </span>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+    {% endif %}
+    
+    {% if not booking.ferrybooking_set.all and not booking.themeparkbooking_set.all and not booking.eventbooking_set.all %}
+    <div class="card p-6">
+        <h3 class="text-lg font-semibold mb-4">Additional Bookings</h3>
+        <p class="text-gray-600">No additional bookings found for this hotel reservation.</p>
+        <div class="mt-4">
+            <a href="{% url 'ferry' %}" class="btn-primary mr-3">Book Ferry</a>
+            <a href="{% url 'events' %}" class="btn-primary">Book Event</a>
+        </div>
+    </div>
+    {% endif %}
+    
+    {% else %}
+    <div class="card p-6">
+        <p class="text-gray-600">Booking not found.</p>
+    </div>
+    {% endif %}
+    
+    <div class="mt-6">
+        <a href="{% url 'booking-view' %}" class="btn-secondary">← Back to My Bookings</a>
+    </div>
+</div>
+{% endblock %}

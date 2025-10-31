@@ -1,0 +1,151 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}IslaHaven — Home{% endblock %}
+
+{% block content %}
+<style>
+  .hero{background-image:url('https://images.unsplash.com/photo-1507525428034-b723cf961d3e?auto=format&fit=crop&w=1600&q=60');background-size:cover;background-position:center}
+  .overlay{background:linear-gradient(180deg, rgba(5,150,105,0.25), rgba(59,130,246,0.18));}
+</style>
+
+<!-- Hero -->
+<section class="hero h-96 relative flex items-center">
+  <div class="overlay absolute inset-0 opacity-95"></div>
+  <div class="max-w-7xl mx-auto relative z-10 px-4 sm:px-6 lg:px-8 flex flex-col md:flex-row items-center justify-between">
+    <div class="text-white max-w-2xl">
+      <h1 class="text-3xl md:text-4xl lg:text-5xl font-extrabold leading-tight">Your Island Escape Awaits</h1>
+      <p class="mt-4 text-lg opacity-90">Book hotels, ferries, theme park access and beach events — all in one place. Hotel booking unlocks ferry & park tickets.</p>
+      <div class="mt-6 flex flex-wrap gap-3">
+        <a href="{% url 'rooms' %}" class="btn-primary px-6 py-3 text-lg">Book a Room</a>
+        <a href="{% url 'ferry' %}" class="btn-secondary px-6 py-3 text-lg">Check Ferry</a>
+      </div>
+    </div>
+
+    <div class="hidden md:block bg-white rounded-xl shadow-lg p-6 w-96 mt-8 md:mt-0">
+      <h3 class="font-semibold text-gray-700 text-lg">Quick Search</h3>
+      <form class="mt-4 space-y-3">
+        <input class="w-full border border-gray-300 rounded px-3 py-2 focus:ring-2 focus:ring-teal-500 focus:border-teal-500" placeholder="Destination: IslaHaven" />
+        <div class="flex gap-2">
+          <input type="date" class="w-1/2 border border-gray-300 rounded px-3 py-2 focus:ring-2 focus:ring-teal-500 focus:border-teal-500" />
+          <input type="date" class="w-1/2 border border-gray-300 rounded px-3 py-2 focus:ring-2 focus:ring-teal-500 focus:border-teal-500" />
+        </div>
+        <select class="w-full border border-gray-300 rounded px-3 py-2 focus:ring-2 focus:ring-teal-500 focus:border-teal-500">
+          <option>2 guests</option>
+          <option>1 guest</option>
+          <option>3 guests</option>
+        </select>
+        <a href="{% url 'rooms' %}" class="block text-center w-full btn-primary py-2">Search Availability</a>
+      </form>
+    </div>
+  </div>
+</section>
+
+<!-- Promo / Ads -->
+<section class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+  <h2 class="text-2xl font-semibold text-teal-600 mb-6">Featured Offers</h2>
+  <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+    {% for ticket in featured_tickets %}
+    <article class="card p-4">
+      <img src="https://images.unsplash.com/photo-1526772662000-3f88f10405ff?auto=format&fit=crop&w=1200&q=60" class="w-full h-40 object-cover rounded" />
+      <h3 class="mt-3 font-semibold">{{ ticket.name }}</h3>
+      <p class="text-sm text-gray-600 mt-1">{{ ticket.description|truncatewords:10 }}</p>
+      <div class="mt-3 flex justify-between items-center">
+        <span class="font-bold text-teal-600">USD {{ ticket.price }}</span>
+        <a href="{% url 'tickets' %}" class="btn-primary text-sm px-3 py-1">Book Now</a>
+      </div>
+    </article>
+    {% empty %}
+    <article class="card p-4">
+      <img src="https://images.unsplash.com/photo-1501117716987-c8e7f3f9a3f9?auto=format&fit=crop&w=1200&q=60" class="w-full h-40 object-cover rounded" />
+      <h3 class="mt-3 font-semibold">Coral Reef Suites — 20% Off</h3>
+      <p class="text-sm text-gray-600 mt-1">Limited time: stay 3 nights get breakfast included. Use code: ISLA20</p>
+    </article>
+    <article class="card p-4">
+      <img src="https://images.unsplash.com/photo-1526772662000-3f88f10405ff?auto=format&fit=crop&w=1200&q=60" class="w-full h-40 object-cover rounded" />
+      <h3 class="mt-3 font-semibold">Space Coaster — FastPass</h3>
+      <p class="text-sm text-gray-600 mt-1">Skip the lines with a FastPass add-on for the Space Exploration Coaster.</p>
+    </article>
+    <article class="card p-4">
+      <img src="https://images.unsplash.com/photo-1507525428034-b723cf961d3e?auto=format&fit=crop&w=1200&q=60" class="w-full h-40 object-cover rounded" />
+      <h3 class="mt-3 font-semibold">Sunset Bay Volleyball Festival</h3>
+      <p class="text-sm text-gray-600 mt-1">Register your team now — limited slots for the weekend event.</p>
+    </article>
+    {% endfor %}
+  </div>
+</section>
+
+<!-- Top Hotels Preview -->
+<section class="bg-white border-t py-12">
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <div class="flex items-center justify-between mb-6">
+      <h2 class="text-xl font-semibold">Top Hotels</h2>
+      <a href="{% url 'rooms' %}" class="btn-transparent">View all</a>
+    </div>
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+      {% for hotel in featured_hotels %}
+      <div class="card">
+        <img src="{{ hotel.image_url|default:'https://images.unsplash.com/photo-1600585154340-be6161a56a0c?auto=format&fit=crop&w=1200&q=60' }}" class="w-full h-44 object-cover" />
+        <div class="p-4">
+          <h3 class="font-semibold">{{ hotel.name }}</h3>
+          <p class="text-sm text-gray-600 mt-2">{{ hotel.description|truncatewords:10 }}</p>
+          <div class="mt-3 flex justify-between items-center">
+            <span class="font-bold text-teal-600">USD {{ hotel.price }} / night</span>
+            <a href="{% url 'rooms' %}" class="btn-primary text-sm px-3 py-1">Book Now</a>
+          </div>
+        </div>
+      </div>
+      {% empty %}
+      <div class="card">
+        <img src="https://images.unsplash.com/photo-1600585154340-be6161a56a0c?auto=format&fit=crop&w=1200&q=60" class="w-full h-44 object-cover" />
+        <div class="p-4">
+          <h3 class="font-semibold">Ocean Pearl Resort</h3>
+          <p class="text-sm text-gray-600 mt-2">4-star seaside stay with pool & spa.</p>
+        </div>
+      </div>
+      <div class="card">
+        <img src="https://images.unsplash.com/photo-1582719478250-c89cae4dc85b?auto=format&fit=crop&w=1200&q=60" class="w-full h-44 object-cover" />
+        <div class="p-4">
+          <h3 class="font-semibold">Coral Reef Suites</h3>
+          <p class="text-sm text-gray-600 mt-2">Luxury suites with private balcony views.</p>
+        </div>
+      </div>
+      <div class="card">
+        <img src="https://images.unsplash.com/photo-1566073771259-6a8506099945?auto=format&fit=crop&w=1200&q=60" class="w-full h-44 object-cover" />
+        <div class="p-4">
+          <h3 class="font-semibold">Lagoon Breeze Inn</h3>
+          <p class="text-sm text-gray-600 mt-2">Budget-friendly option near the market.</p>
+        </div>
+      </div>
+      {% endfor %}
+    </div>
+  </div>
+</section>
+
+<!-- Quick Links -->
+<section class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10">
+  <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+    <a href="{% url 'ferry' %}" class="card p-6">
+      <h4 class="font-semibold text-lg">Ferry Schedule</h4>
+      <p class="text-sm text-gray-600 mt-2">Check times and book rides to the theme park island.</p>
+      <div class="mt-4">
+        <span class="btn-transparent">View Schedule</span>
+      </div>
+    </a>
+    <a href="{% url 'tickets' %}" class="card p-6">
+      <h4 class="font-semibold text-lg">My Tickets</h4>
+      <p class="text-sm text-gray-600 mt-2">View & download your ferry and park tickets.</p>
+      <div class="mt-4">
+        <span class="btn-transparent">View Tickets</span>
+      </div>
+    </a>
+    <a href="{% url 'booking-view' %}" class="card p-6">
+      <h4 class="font-semibold text-lg">My Bookings</h4>
+      <p class="text-sm text-gray-600 mt-2">Manage your hotel, ferry and event reservations.</p>
+      <div class="mt-4">
+        <span class="btn-transparent">Manage Bookings</span>
+      </div>
+    </a>
+  </div>
+</section>
+{% endblock %}

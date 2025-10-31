@@ -1,0 +1,61 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}IslaHaven — Tickets{% endblock %}
+
+{% block content %}
+<h2 class="text-xl font-semibold mb-2">My Tickets</h2>
+<p class="text-sm text-gray-600 mb-6">Tickets you purchased for ferries and park events.</p>
+
+<div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+  {% for booking in bookings %}
+  {% if booking.ferrybooking_set.all %}
+  {% for ferry_booking in booking.ferrybooking_set.all %}
+  <div class="card p-6">
+    <div class="flex items-center justify-between">
+      <div>
+        <div class="text-sm text-gray-500 font-medium">Ferry Ticket</div>
+        <div class="font-semibold text-lg">{{ ferry_booking.ferry.name }}</div>
+        <div class="text-sm text-gray-600">{{ ferry_booking.departure_date|date:"M d, Y" }} at {{ ferry_booking.ferry.departure_time|time:"H:i" }}</div>
+        <div class="text-xs text-gray-500 mt-1">Booking ID: {{ booking.booking_reference }}</div>
+      </div>
+      <div class="text-right">
+        <div class="font-bold text-lg text-teal-600">USD {{ ferry_booking.total_price }}</div>
+        <a href="#" class="btn-primary mt-3 text-sm">Download Ticket</a>
+      </div>
+    </div>
+  </div>
+  {% endfor %}
+  {% endif %}
+  {% if booking.themeparkbooking_set.all %}
+  {% for park_booking in booking.themeparkbooking_set.all %}
+  <div class="card p-6">
+    <div class="flex items-center justify-between">
+      <div>
+        <div class="text-sm text-gray-500 font-medium">Theme Park Ticket</div>
+        <div class="font-semibold text-lg">{{ park_booking.ticket.name }}</div>
+        <div class="text-sm text-gray-600">{{ park_booking.ticket.valid_from|date:"M d, Y" }} - {{ park_booking.ticket.valid_until|date:"M d, Y" }}</div>
+        <div class="text-xs text-gray-500 mt-1">Ticket ID: {{ park_booking.id }}</div>
+      </div>
+      <div class="text-right">
+        <div class="font-bold text-lg text-teal-600">USD {{ park_booking.total_price }}</div>
+        <a href="#" class="btn-primary mt-3 text-sm">Download Ticket</a>
+      </div>
+    </div>
+  </div>
+  {% endfor %}
+  {% endif %}
+  {% endfor %}
+
+  <!-- If no bookings exist, show some default tickets -->
+  {% if not bookings %}
+  <div class="col-span-2 text-center py-8">
+    <p class="text-gray-600">No tickets available yet. Book a hotel first to unlock ferry and theme park tickets.</p>
+  </div>
+  {% endif %}
+</div>
+
+<div class="mt-8 text-sm text-gray-600 p-4 bg-blue-50 rounded-lg">
+  <p>If you don't see your ticket, confirm your hotel booking first or check the dashboard.</p>
+</div>
+{% endblock %}
